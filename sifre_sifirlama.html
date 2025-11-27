@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Şifre Sıfırlama</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .kapsayici {
+      max-width: 400px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .grup {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .hata {
+      color: red;
+      font-size: 12px;
+    }
+    .buton {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      background: #007bff;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .mesaj {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .mesaj.basarili {
+      color: green;
+    }
+    .mesaj.hata {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="kapsayici">
+    <h2>Şifre Sıfırlama</h2>
+
+    <form id="sifreForm">
+
+      <div class="grup">
+        <label for="email">Kayıtlı E-posta</label>
+        <input id="email" type="email" />
+        <div id="hataEmail" class="hata"></div>
+      </div>
+
+      <div class="grup">
+        <label for="kod">Doğrulama Kodu</label>
+        <input id="kod" type="text" />
+        <div id="hataKod" class="hata"></div>
+      </div>
+
+      <div class="grup">
+        <label for="yeniSifre">Yeni Şifre</label>
+        <input id="yeniSifre" type="password" />
+        <div id="hataYeniSifre" class="hata"></div>
+      </div>
+
+      <div class="grup">
+        <label for="yeniSifreTekrar">Yeni Şifre (Tekrar)</label>
+        <input id="yeniSifreTekrar" type="password" />
+        <div id="hataYeniSifreTekrar" class="hata"></div>
+      </div>
+
+      <button type="submit" class="buton">Şifreyi Sıfırla</button>
+    </form>
+
+    <div id="genelMesaj" class="mesaj"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("sifreForm");
+    const email = document.getElementById("email");
+    const kod = document.getElementById("kod");
+    const yeniSifre = document.getElementById("yeniSifre");
+    const yeniSifreTekrar = document.getElementById("yeniSifreTekrar");
+
+    const hataEmail = document.getElementById("hataEmail");
+    const hataKod = document.getElementById("hataKod");
+    const hataYeniSifre = document.getElementById("hataYeniSifre");
+    const hataYeniSifreTekrar = document.getElementById("hataYeniSifreTekrar");
+    const genelMesaj = document.getElementById("genelMesaj");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      // Hataları temizle
+      hataEmail.textContent = "";
+      hataKod.textContent = "";
+      hataYeniSifre.textContent = "";
+      hataYeniSifreTekrar.textContent = "";
+      genelMesaj.textContent = "";
+      genelMesaj.className = "mesaj";
+
+      let hatali = false;
+
+      if (!email.value.trim()) {
+        hataEmail.textContent = "E-posta zorunlu.";
+        hatali = true;
+      } else {
+        const re = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+        if (!re.test(email.value)) {
+          hataEmail.textContent = "Geçerli bir e-posta girin.";
+          hatali = true;
+        }
+      }
+
+      if (!kod.value.trim()) {
+        hataKod.textContent = "Doğrulama kodu zorunlu.";
+        hatali = true;
+      }
+
+      if (!yeniSifre.value.trim()) {
+        hataYeniSifre.textContent = "Yeni şifre zorunlu.";
+        hatali = true;
+      } else if (yeniSifre.value.length < 8) {
+        hataYeniSifre.textContent = "Şifre en az 8 karakter olmalı.";
+        hatali = true;
+      }
+
+      if (yeniSifre.value !== yeniSifreTekrar.value) {
+        hataYeniSifreTekrar.textContent = "Şifreler eşleşmiyor.";
+        hatali = true;
+      }
+
+      if (hatali) {
+        genelMesaj.textContent = "Lütfen formdaki hataları düzeltin.";
+        genelMesaj.classList.add("hata");
+        return;
+      }
+
+      // Backend yoksa örnek başarı mesajı
+      genelMesaj.textContent = "Şifre başarıyla sıfırlandı (örnek mesaj).";
+      genelMesaj.classList.add("basarili");
+    });
+  </script>
+
+</body>
+</html>
