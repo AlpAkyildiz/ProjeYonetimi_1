@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-
+//SABİT
 const app = express();
 
 // gerekli middlewares
