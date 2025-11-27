@@ -1,0 +1,3 @@
+- Register API çalıştı ✔
+- Login API çalıştı ✔
+- Reset Password API çalıştı ✔
