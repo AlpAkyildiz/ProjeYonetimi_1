@@ -3,29 +3,33 @@ const cors = require("cors");
 
 const app = express();
 
-// gerekli middlewares
 app.use(cors());
 app.use(express.json());
 
-// Sahte veri tabanı (gerçek DB istemiyorlar)
-let users = [];
+// fake user database
+let users = [
+    {
+        id: 1,
+        fullName: "Test Kullanıcı",
+        email: "test@example.com",
+        password: "123456"
+    }
+];
 
-// REGISTER (Kayıt API)
+
+// REGISTER API
 app.post("/api/register", (req, res) => {
     const { fullName, email, password } = req.body;
 
-    // boş kontrolü
     if (!fullName || !email || !password) {
         return res.status(400).json({ message: "Tüm alanlar zorunludur." });
     }
 
-    // email daha önce kullanıldı mı?
     const already = users.find(u => u.email === email);
     if (already) {
         return res.status(409).json({ message: "Bu e-posta zaten kayıtlı." });
     }
 
-    // yeni kullanıcıyı kaydet
     const newUser = {
         id: users.length + 1,
         fullName,
@@ -41,7 +45,29 @@ app.post("/api/register", (req, res) => {
     });
 });
 
-// SUNUCU
+
+// LOGIN API
+app.post("/api/login", (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: "E-posta ve şifre zorunlu." });
+    }
+
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (!user) {
+        return res.status(401).json({ message: "E-posta veya şifre hatalı." });
+    }
+
+    return res.json({
+        message: "Giriş başarılı!",
+        user
+    });
+});
+
+
+// SERVER
 app.listen(5000, () => {
     console.log("Backend çalışıyor → http://localhost:5000");
 });
