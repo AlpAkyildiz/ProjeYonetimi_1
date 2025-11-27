@@ -67,6 +67,33 @@ app.post("/api/login", (req, res) => {
 });
 
 
+// RESET PASSWORD API
+app.post("/api/reset-password", (req, res) => {
+    const { email, code, newPassword } = req.body;
+
+    if (!email || !code || !newPassword) {
+        return res.status(400).json({ message: "Tüm alanlar zorunludur." });
+    }
+
+    if (code !== "123456") {
+        return res.status(401).json({ message: "Kod hatalı." });
+    }
+
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+        return res.status(404).json({ message: "Kullanıcı bulunamadı." });
+    }
+
+    user.password = newPassword;
+
+    return res.json({
+        message: "Şifre başarıyla sıfırlandı.",
+        user
+    });
+});
+
+
 // SERVER
 app.listen(5000, () => {
     console.log("Backend çalışıyor → http://localhost:5000");
