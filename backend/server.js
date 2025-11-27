@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-
+   //sabit
 const app = express();
 
 app.use(cors());
